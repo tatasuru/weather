@@ -5,7 +5,7 @@
         <div class="search">
           <p>都道府県</p>
           <select
-          @change="arrEmp"
+          @click="arrEmp"
           v-model="curPref">
             <option disabled value="">選択してください</option>
             <option
@@ -16,14 +16,23 @@
         </div>
         <div class="search">
           <p>地域</p>
-          <select v-model="curCity">
+          <select
+          @change="citySelect"
+          v-model="curCity"
+          class="city-Select">
             <option disabled value="">選択してください</option>
             <option
-            v-for="city in prefChange"
-            :key="city"
-            :value="city">{{city}}</option>
+            class="city-option"
+            v-for="city in prefChange.citys"
+            :key="city.id"
+            :value="city.name"
+            :data-id="city.id">{{city.name}}</option>
           </select>
         </div>
+        <button
+        @click="getWeather"
+        :class="{active : curCity}"
+        class="searchBtn">検索する</button>
       </div>
     </div>
   </div>
@@ -48,24 +57,79 @@ nav {
     &.router-link-exact-active {
       color: #42b983;
     }
+
   }
+
 }
 
 .home{
+
   .searchArea{
+
+    padding: 20px;
     display: flex;
+    align-items: center;
+
     .search{
-      &:nth-last-child(1){
-        margin-left: 60px;
-      }
+
+        margin-right: 60px;
+
     }
+
+    .searchBtn{
+
+      width: 100px;
+      appearance: none;
+      border: 0;
+      border-radius: 0;
+      background: rgb(40, 215, 168);
+      padding: 10px 0;
+      color: #fff;
+      font-weight:600;
+      position: relative;
+      border-radius: 10px;
+      pointer-events: none;
+
+      &::after{
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba($color: #000000, $alpha: .5);
+        border-radius: 10px;
+      }
+
+      &:hover{
+        cursor: pointer;
+        background: rgba(40, 215, 168, 0.8)
+      }
+
+      &.active{
+
+        pointer-events: auto;
+
+        &::after{
+
+          content: "";
+          display: none;
+
+        }
+
+      }
+
+    }
+
   }
+
 }
 </style>
 
 <script>
 // @ is an alias to /src
-// import axios from 'axios'
+import axios from 'axios'
+// import VueAxios from 'vue-axios'
 
 export default {
   name: 'HomeView',
@@ -447,23 +511,34 @@ export default {
           ]
         }
       ],
-      citys: [],
+      citys: '',
       curPref: '',
       curCity: '',
+      curCityId: '',
       curWether: '',
       hasError: false,
       errorMessage: '',
+      // citiesSelect: document.querySelector('.city-Select'),
       loading: false
     }
   },
   computed: {
+    // prefChange () {
+    //   if (this.curPref !== '') {
+    //     const result = this.prefs.filter(item => item.name === this.curPref)
+    //     result.forEach(item => {
+    //       item.citys.forEach(item => {
+    //         this.citys.push(item.name)
+    //       })
+    //     })
+    //   }
+    //   return this.citys
+    // }
     prefChange () {
       if (this.curPref !== '') {
         const result = this.prefs.filter(item => item.name === this.curPref)
         result.forEach(item => {
-          item.citys.forEach(item => {
-            this.citys.push(item.name)
-          })
+          this.citys = item
         })
       }
       return this.citys
@@ -474,6 +549,23 @@ export default {
   methods: {
     arrEmp () {
       this.citys = []
+      this.curCity = ''
+    },
+    citySelect () {
+      const target = document.querySelectorAll('.city-option')
+      for (let i = 0; target.length > i; i++) {
+        this.curCityId = target[i].dataset.id
+      }
+    },
+    getWeather () {
+      axios.get(`https://weather.tsukumijima.net/api/forecast?city=${this.curCityId}`)
+        .then(res => {
+          this.curWether = res.data
+          console.log(this.curWether)
+        })
+        .catch(err => {
+          console.error(err)
+        })
     }
   }
 }
