@@ -25,14 +25,77 @@
             class="city-option"
             v-for="city in prefChange.citys"
             :key="city.id"
-            :value="city.name"
-            :data-id="city.id">{{city.name}}</option>
+            :value="city.id">
+            {{city.name}}</option>
           </select>
         </div>
         <button
         @click="getWeather"
         :class="{active : curCity}"
         class="searchBtn">検索する</button>
+      </div>
+      <div class="resultArea">
+        <div class="resultArea_box">
+          <div class="resultArea_box_ttl">
+            <p>予報の発表日時</p>
+          </div>
+          <div class="resultArea_box_txt">
+            <p
+            v-if = "curWether !== ''"
+            >{{curWether.publicTimeFormatted}}</p>
+          </div>
+        </div>
+        <div class="resultArea_box">
+          <div class="resultArea_box_ttl">
+            <p>地域</p>
+          </div>
+          <div class="resultArea_box_txt">
+            <p
+            v-if = "curWether !== ''"
+            >{{curWether.title}}</p>
+          </div>
+        </div>
+        <div class="resultArea_box">
+          <div class="resultArea_box_ttl">
+            <p>天気の概要</p>
+          </div>
+          <div class="resultArea_box_txt">
+            <p
+            style="white-space: pre-line"
+            v-if = "curWether !== ''"
+            >{{curWether.description.text}}</p>
+          </div>
+        </div>
+        <div class="resultArea_box">
+          <div class="resultArea_box_ttl">
+            <p>天気の予報</p>
+          </div>
+          <div class="resultArea_box_txt">
+            <p
+            v-if = "curWether !== ''"
+            >{{curWether.forecasts[0].telop}}</p>
+          </div>
+        </div>
+        <div class="resultArea_box">
+          <div class="resultArea_box_ttl">
+            <p>気温</p>
+          </div>
+          <div class="resultArea_box_txt">
+            <p
+            v-if = "curWether !== ''"
+            >{{curWether.forecasts[0].temperature.max.celsius}}℃</p>
+          </div>
+        </div>
+        <div class="resultArea_box">
+          <div class="resultArea_box_ttl">
+            <p>天気図</p>
+          </div>
+          <div class="resultArea_box_txt">
+            <img
+            :src="curWether.forecasts[0].image.url"
+            v-if = "curWether !== ''">
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -115,6 +178,47 @@ nav {
           content: "";
           display: none;
 
+        }
+
+      }
+
+    }
+
+  }
+
+  .resultArea{
+    padding: 20px;
+
+    &_box{
+
+      display: flex;
+
+      &_ttl{
+        background: #a3a3a3;
+        padding: 0 20px;
+        border: 1px solid #000;
+        width: 20%;
+
+        p{
+          color: #fff;
+          font-size: 16px;
+          font-weight: 600;
+        }
+
+      }
+
+      &_txt{
+        background: #fff;
+        padding: 0 20px;
+        border: 1px solid #000;
+        border-left: 0;
+        width: 80%;
+        text-align: left;
+
+        p{
+          color: #000;
+          font-size: 16px;
+          font-weight: 600;
         }
 
       }
@@ -551,17 +655,20 @@ export default {
       this.citys = []
       this.curCity = ''
     },
-    citySelect () {
-      const target = document.querySelectorAll('.city-option')
-      for (let i = 0; target.length > i; i++) {
-        this.curCityId = target[i].dataset.id
-      }
-    },
+    // citySelect () {
+    //   const target = document.querySelectorAll('.city-option')
+    //   for (let i = 0; target.length > i; i++) {
+    //     this.curCityId = target[i].dataset.id
+    //   }
+    //   console.log(`https://weather.tsukumijima.net/api/forecast?city=${this.curCityId}`)
+    // },
     getWeather () {
-      axios.get(`https://weather.tsukumijima.net/api/forecast?city=${this.curCityId}`)
+      axios.get(`https://weather.tsukumijima.net/api/forecast?city=${this.curCity}`)
         .then(res => {
-          this.curWether = res.data
-          console.log(this.curWether)
+          if (res.data) {
+            this.curWether = res.data
+            console.log(this.curWether)
+          }
         })
         .catch(err => {
           console.error(err)
