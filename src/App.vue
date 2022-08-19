@@ -83,7 +83,7 @@
           <div class="resultArea_box_txt">
             <p
             v-if = "curWether !== ''"
-            >{{curWether.forecasts[0].temperature.max.celsius}}℃</p>
+            >{{curWether.forecasts[1].temperature.max.celsius}}℃</p>
           </div>
         </div>
         <div class="resultArea_box">
@@ -102,6 +102,14 @@
 </template>
 
 <style lang="scss">
+
+$tab: 767px;
+@mixin tab {
+  @media (max-width: ($tab)) {
+    @content;
+  }
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -133,10 +141,33 @@ nav {
     display: flex;
     align-items: center;
 
+    @include tab () {
+      display: block;
+    }
+
     .search{
 
         margin-right: 60px;
 
+        @include tab () {
+          margin: 0 auto;
+          width: 100%;
+          font-size: 16px;
+        }
+
+    }
+
+    select{
+      @include tab () {
+        width: 100%;
+        font-size: 15px;
+      }
+
+      option{
+        @include tab () {
+          font-size: 18px;
+        }
+      }
     }
 
     .searchBtn{
@@ -152,6 +183,10 @@ nav {
       position: relative;
       border-radius: 10px;
       pointer-events: none;
+
+      @include tab () {
+        margin-top: 40px;
+      }
 
       &::after{
         content: "";
@@ -188,16 +223,27 @@ nav {
 
   .resultArea{
     padding: 20px;
+    max-width: 1280px;
+    margin-top: 50px;
 
     &_box{
 
       display: flex;
+
+      @include tab () {
+        display: block;
+      }
 
       &_ttl{
         background: #a3a3a3;
         padding: 0 20px;
         border: 1px solid #000;
         width: 20%;
+
+        @include tab () {
+          width: 100%;
+          padding: 0 ;
+        }
 
         p{
           color: #fff;
@@ -215,10 +261,20 @@ nav {
         width: 80%;
         text-align: left;
 
+        @include tab () {
+          width: 100%;
+          padding: 0 ;
+          border-left: 1px solid #000;
+        }
+
         p{
           color: #000;
           font-size: 16px;
           font-weight: 600;
+
+          @include tab () {
+            padding: 0 20px;
+          }
         }
 
       }
