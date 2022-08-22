@@ -103,9 +103,9 @@
 
 <style lang="scss">
 
-$tab: 767px;
-@mixin tab {
-  @media (max-width: ($tab)) {
+$sp: 767px;
+@mixin sp {
+  @media (max-width: ($sp)) {
     @content;
   }
 }
@@ -141,7 +141,7 @@ nav {
     display: flex;
     align-items: center;
 
-    @include tab () {
+    @include sp () {
       display: block;
     }
 
@@ -149,7 +149,7 @@ nav {
 
         margin-right: 60px;
 
-        @include tab () {
+        @include sp () {
           margin: 0 auto;
           width: 100%;
           font-size: 16px;
@@ -158,13 +158,13 @@ nav {
     }
 
     select{
-      @include tab () {
+      @include sp () {
         width: 100%;
         font-size: 15px;
       }
 
       option{
-        @include tab () {
+        @include sp () {
           font-size: 18px;
         }
       }
@@ -184,7 +184,7 @@ nav {
       border-radius: 10px;
       pointer-events: none;
 
-      @include tab () {
+      @include sp () {
         margin-top: 40px;
       }
 
@@ -230,7 +230,7 @@ nav {
 
       display: flex;
 
-      @include tab () {
+      @include sp () {
         display: block;
       }
 
@@ -240,7 +240,7 @@ nav {
         border: 1px solid #000;
         width: 20%;
 
-        @include tab () {
+        @include sp () {
           width: 100%;
           padding: 0 ;
         }
@@ -261,7 +261,7 @@ nav {
         width: 80%;
         text-align: left;
 
-        @include tab () {
+        @include sp () {
           width: 100%;
           padding: 0 ;
           border-left: 1px solid #000;
@@ -272,7 +272,7 @@ nav {
           font-size: 16px;
           font-weight: 600;
 
-          @include tab () {
+          @include sp () {
             padding: 0 20px;
           }
         }
@@ -284,6 +284,7 @@ nav {
   }
 
 }
+
 </style>
 
 <script>
