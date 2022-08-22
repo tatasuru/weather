@@ -8,10 +8,15 @@
           @click="arrEmp"
           v-model="curPref">
             <option disabled value="">選択してください</option>
-            <option
+            <!-- <option
             v-for="pref in prefs"
             :key="pref.id"
-            :value="pref.name">{{pref.name}}</option>
+            :value="pref.name">{{pref.name}}</option> -->
+            <SelectBox
+            v-for="pref in prefs"
+            :key="pref.name"
+            :item="pref"
+            />
           </select>
         </div>
         <div class="search">
@@ -291,6 +296,7 @@ nav {
 // @ is an alias to /src
 import axios from 'axios'
 // import VueAxios from 'vue-axios'
+import SelectBox from '@/components/SelectBox.vue'
 
 export default {
   name: 'HomeView',
@@ -731,6 +737,9 @@ export default {
           console.error(err)
         })
     }
+  },
+  components: {
+    SelectBox
   }
 }
 </script>

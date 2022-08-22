@@ -1,11 +1,14 @@
 <template>
+  <option>{{item.name}}</option>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: 'SelectBox',
   props: {
-    msg: String
+    item: {
+      type: Object
+    }
   }
 }
 </script>
