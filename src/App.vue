@@ -8,10 +8,6 @@
           @click="arrEmp"
           v-model="curPref">
             <option disabled value="">選択してください</option>
-            <!-- <option
-            v-for="pref in prefs"
-            :key="pref.id"
-            :value="pref.name">{{pref.name}}</option> -->
             <SelectBox
             v-for="pref in prefs"
             :key="pref.name"
@@ -295,7 +291,6 @@ nav {
 <script>
 // @ is an alias to /src
 import axios from 'axios'
-// import VueAxios from 'vue-axios'
 import SelectBox from '@/components/SelectBox.vue'
 
 export default {
@@ -685,22 +680,10 @@ export default {
       curWether: '',
       hasError: false,
       errorMessage: '',
-      // citiesSelect: document.querySelector('.city-Select'),
       loading: false
     }
   },
   computed: {
-    // prefChange () {
-    //   if (this.curPref !== '') {
-    //     const result = this.prefs.filter(item => item.name === this.curPref)
-    //     result.forEach(item => {
-    //       item.citys.forEach(item => {
-    //         this.citys.push(item.name)
-    //       })
-    //     })
-    //   }
-    //   return this.citys
-    // }
     prefChange () {
       if (this.curPref !== '') {
         const result = this.prefs.filter(item => item.name === this.curPref)
