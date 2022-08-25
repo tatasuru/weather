@@ -4,21 +4,24 @@
       <div class="searchArea">
         <div class="search">
           <p>都道府県</p>
-          <select
+          <!-- <select
           @click="arrEmp"
           v-model="curPref">
             <option disabled value="">選択してください</option>
-            <SelectBox
+            <option
             v-for="pref in prefs"
-            :key="pref.name"
-            :item="pref"
-            />
-          </select>
+            :key="pref"
+            >{{pref.name}}</option>
+          </select> -->
+          <SelectBox
+          @koike="koikeEmi"
+          @click="arrEmp"
+          :items="prefs"
+          :name="'a'"/>
         </div>
         <div class="search">
           <p>地域</p>
-          <select
-          @change="citySelect"
+          <!-- <select
           v-model="curCity"
           class="city-Select">
             <option disabled value="">選択してください</option>
@@ -28,12 +31,18 @@
             :key="city.id"
             :value="city.id">
             {{city.name}}</option>
-          </select>
+          </select> -->
+          <SelectBox
+          @koike="koikeEmiNigo"
+          :name="'b'"
+          :items="prefChange.citys"/>
         </div>
         <button
         @click="getWeather"
         :class="{active : curCity}"
-        class="searchBtn">検索する</button>
+        class="searchBtn">
+        検索する
+        </button>
       </div>
       <div class="resultArea">
         <div class="resultArea_box">
@@ -680,13 +689,14 @@ export default {
       curWether: '',
       hasError: false,
       errorMessage: '',
-      loading: false
+      loading: false,
+      SelectedVal: ''
     }
   },
   computed: {
     prefChange () {
-      if (this.curPref !== '') {
-        const result = this.prefs.filter(item => item.name === this.curPref)
+      if (this.SelectedVal !== '') {
+        const result = this.prefs.filter(item => item.name === this.SelectedVal)
         result.forEach(item => {
           this.citys = item
         })
@@ -701,13 +711,12 @@ export default {
       this.citys = []
       this.curCity = ''
     },
-    // citySelect () {
-    //   const target = document.querySelectorAll('.city-option')
-    //   for (let i = 0; target.length > i; i++) {
-    //     this.curCityId = target[i].dataset.id
-    //   }
-    //   console.log(`https://weather.tsukumijima.net/api/forecast?city=${this.curCityId}`)
-    // },
+    koikeEmi (value) {
+      this.SelectedVal = value
+    },
+    koikeEmiNigo (value) {
+      this.curCity = value
+    },
     getWeather () {
       axios.get(`https://weather.tsukumijima.net/api/forecast?city=${this.curCity}`)
         .then(res => {

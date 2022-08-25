@@ -1,13 +1,34 @@
 <template>
-  <option>{{item.name}}</option>
+  <select
+  v-model="SelectedVal">
+    <option disabled value="">選択してください</option>
+    <option
+    v-for="item in items"
+    :key="item"
+    :value="name === 'a' ? item.name : item.id"
+    >{{item.name}}</option>
+  </select>
 </template>
 
 <script>
 export default {
   name: 'SelectBox',
+  data () {
+    return {
+      SelectedVal: ''
+    }
+  },
   props: {
-    item: {
+    items: {
       type: Object
+    },
+    name: {
+      type: String
+    }
+  },
+  watch: {
+    SelectedVal (newVal, oldVal) {
+      this.$emit('koike', newVal)
     }
   }
 }
